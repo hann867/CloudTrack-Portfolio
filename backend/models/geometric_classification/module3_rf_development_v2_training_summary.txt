@@ -1,0 +1,34 @@
+MODULE 3 FINAL ASSIGNMENT MODEL - DEVELOPMENT RF V2
+
+Model version: module3_rf_development_v2
+Model stage: development
+Training dataset: backend/data/processed/geometric_classification/expanded_human_approved_module3_features/final_independent/final_independent_module3_features.csv
+Training dataset SHA-256: 0f35ccb4d0b3e496e28d462a252ebcb1bc76070c0bfaeee46c2d04f5df0a2fac
+Training samples: 34
+Alpha: 15
+Electron: 19
+AWAN: 6
+Lecturer: 28
+Dependency groups: 29
+
+Feature order: track_length_px, mean_width_px, median_width_px, max_width_px, mean_curvature, max_curvature, tortuosity
+RF parameters: {'n_estimators': 100, 'random_state': 42, 'class_weight': 'balanced'}
+Preprocessing: none
+
+Training GT IDs:
+A002, A003, A004, A007, A009, A015, A016, A022, A024, A029, A037, A039, A042, A046, A049, E002, E003, E004, E006, E010, E013, E014, E016, E017, E018, E019, E020, E021, E023, E039, E044, E049, E055, E056
+
+Performance evidence:
+backend/data/processed/geometric_classification/expanded_independent_rf_reevaluation/rf_reevaluation_summary.txt
+Performance evidence SHA-256: 5d9d0dbe5772e9eddc951d1e41969a1e29f7178bd9c6350f24bd8a16e0c55916
+The preserved grouped OOF evaluation, not full-fit training predictions, is the performance evidence.
+Training-set accuracy was not calculated or reported.
+
+Known limitations:
+- AWAN Electron = 0.
+- The grouped OOF evaluation is exploratory evidence and does not establish source-generalizable performance.
+- The deployed full-fit artifact has no held-out predictions of its own; the preserved 34-row grouped OOF evaluation remains the performance evidence.
+
+Training timestamp: 2026-08-31T16:33:30.012950+00:00
+Training code version: 74086a0a1a464c10ede32c27981fe513479bd6c3
+Artifact reload validation: PASS

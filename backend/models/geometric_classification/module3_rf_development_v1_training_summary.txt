@@ -1,0 +1,22 @@
+Training samples: 29
+Alpha: 15
+Electron: 14
+
+Source counts:
+AWAN: 10
+Lecturer: 19
+
+Features: 7
+Feature order: track_length_px, mean_width_px, median_width_px, max_width_px, mean_curvature, max_curvature, tortuosity
+
+Parameters:
+n_estimators: 100
+random_state: 42
+class_weight: balanced
+
+Model stage: development
+Artifact validation: PASS
+
+THIS MODEL IS A DEVELOPMENT ARTIFACT.
+THE GROUPED OOF PILOT, NOT TRAINING RESUBSTITUTION, IS THE CURRENT
+PERFORMANCE EVIDENCE.

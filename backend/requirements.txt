@@ -1,0 +1,19 @@
+opencv-python
+numpy
+matplotlib
+scikit-image
+pandas
+PyYAML
+tqdm
+jupyter
+
+# Module 3 geometric classification
+scikit-learn
+joblib
+
+# FastAPI backend
+fastapi
+uvicorn[standard]
+python-multipart
+reportlab
+imageio-ffmpeg>=0.6.0,<0.7

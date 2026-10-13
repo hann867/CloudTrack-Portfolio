@@ -1,0 +1,33 @@
+{
+  "model_type": "RandomForestClassifier",
+  "model_version": "module3_rf_development_v1",
+  "model_stage": "development",
+  "feature_names": [
+    "track_length_px",
+    "mean_width_px",
+    "median_width_px",
+    "max_width_px",
+    "mean_curvature",
+    "max_curvature",
+    "tortuosity"
+  ],
+  "class_names": [
+    "Alpha",
+    "Electron"
+  ],
+  "random_state": 42,
+  "n_estimators": 100,
+  "class_weight": "balanced",
+  "training_timestamp": "2026-08-31T07:14:42.741294+00:00",
+  "training_dataset_identifier": "backend/data/processed/geometric_classification/production_module2_features/revised_confirmed_module2_geometric_features.csv",
+  "training_sample_count": 29,
+  "training_class_counts": {
+    "Alpha": 15,
+    "Electron": 14
+  },
+  "training_source_counts": {
+    "AWAN": 10,
+    "Lecturer": 19
+  },
+  "training_code_version": "2464ce69fab7e40d9c8c8fa961316a52a817431c"
+}

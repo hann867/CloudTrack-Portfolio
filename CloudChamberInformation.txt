@@ -1,0 +1,492 @@
+# CloudTrack System Context for New Chat
+
+Please use this as the full working context for the CloudTrack project.
+
+## Project Title
+
+CloudTrack: An Intelligent Image Processing System for Cloud Chamber Particle Track Detection, Measurement and Classification
+
+## Project Overview
+
+CloudTrack is an image processing system designed to analyse cloud chamber images. A cloud chamber shows visible condensation trails produced by ionising radiation. These trails are known as particle tracks. The system aims to process cloud chamber images, detect particle tracks, measure their geometric properties, classify the particle type, and present the results in a clear analytical format.
+
+The system focuses mainly on Alpha and Electron particle tracks. Alpha particle tracks are generally shorter, thicker, and straighter. Electron tracks are generally longer, thinner, and more irregular due to scattering.
+
+The overall goal is to reduce manual visual inspection and support more objective, repeatable, and measurable particle track analysis.
+
+## Overall System Pipeline
+
+The system is divided into four modules.
+
+1. Image Pre-processing and Calibration
+2. Particle Track Detection and Segmentation
+3. Geometric Analysis and Particle Classification
+4. Particle Analytics and Result Management
+
+The processing flow is:
+
+Raw Cloud Chamber Image  
+→ Image Pre-processing and Calibration  
+→ Particle Track Detection and Segmentation  
+→ Geometric Feature Extraction  
+→ Particle Classification  
+→ Result Visualisation and Report Generation
+
+## Module 1: Image Pre-processing and Calibration
+
+### Purpose
+
+This module prepares raw cloud chamber images before particle detection is performed. Raw images may contain noise, uneven illumination, low contrast, vapour artefacts, and background condensation. These issues can make particle tracks difficult to detect accurately.
+
+### Why This Module Is Needed
+
+Particle detection and measurement will be inaccurate if the original image quality is poor. Noise may be mistaken as particle tracks, while faint particle tracks may be missed. Calibration is also needed because measurements in pixels must be converted into real-world units such as millimetres or centimetres.
+
+### Main Tasks
+
+This module performs:
+
+- Image loading
+- Image validation
+- Grayscale conversion
+- Noise reduction
+- Illumination correction
+- Contrast enhancement
+- Pixel-to-distance calibration
+- Saving enhanced images
+- Saving calibration metadata
+
+### Algorithms Used
+
+Noise reduction:
+
+- Median Filtering
+- Gaussian Filtering
+- Bilateral Filtering
+
+Selected default:
+
+- Median Filtering
+
+Reason:
+
+Median Filtering is selected because it reduces noise while preserving particle track boundaries. This is important because later stages depend on accurate track edges.
+
+Contrast enhancement:
+
+- Histogram Equalisation
+- CLAHE
+- Gamma Correction
+
+Selected default:
+
+- CLAHE
+
+Reason:
+
+CLAHE is selected because it improves local contrast while limiting excessive noise amplification. This is useful for cloud chamber images because particle tracks may be faint and illumination may be uneven.
+
+Illumination correction:
+
+- Gaussian blur background estimation
+- Background subtraction or normalisation
+
+Reason:
+
+Cloud chamber images may have uneven lighting. Illumination correction helps make the image background more consistent before thresholding.
+
+Calibration:
+
+- Manual two-point calibration
+- Pixel distance calculation
+- Millimetres per pixel
+- Pixels per millimetre
+
+Reason:
+
+Calibration converts image measurements from pixels into real-world distance units. This supports meaningful geometric measurement later.
+
+### Module 1 Input
+
+- Raw cloud chamber image
+- Optional calibration image
+- Known real-world distance between two selected reference points
+
+### Module 1 Output
+
+- Enhanced image
+- Grayscale image
+- Noise-reduced image
+- Illumination-corrected image
+- CLAHE-enhanced final image
+- Calibration metadata
+- Pixel-to-mm or pixel-to-cm conversion ratio
+
+## Module 2: Particle Track Detection and Segmentation
+
+### Purpose
+
+This module detects and separates particle tracks from the image background after pre-processing has been completed.
+
+### Why This Module Is Needed
+
+Before the system can measure or classify particle tracks, it must first know where the particle tracks are located. Segmentation separates foreground particle tracks from the background. If segmentation is poor, later measurement and classification will also be unreliable.
+
+### Main Tasks
+
+This module performs:
+
+- Thresholding
+- Binary image creation
+- Noise artefact removal
+- Track gap filling
+- Individual particle region separation
+- Boundary detection
+- Region of interest extraction
+
+### Algorithms Used
+
+Thresholding:
+
+- Otsu Thresholding
+- Adaptive Thresholding
+
+Selected default:
+
+- Adaptive Thresholding
+
+Reason:
+
+Adaptive Thresholding is more suitable than global thresholding because cloud chamber images may have uneven illumination. It calculates local threshold values and helps preserve faint particle tracks.
+
+Morphological operations:
+
+- Morphological Opening
+- Morphological Closing
+
+Reason:
+
+Opening removes small noise artefacts. Closing reconnects small gaps in fragmented particle tracks.
+
+Object separation:
+
+- Connected Component Analysis
+
+Reason:
+
+Connected Component Analysis separates multiple particle tracks into individual regions so each track can be analysed independently.
+
+Boundary detection:
+
+- Contour Detection
+
+Reason:
+
+Contour Detection identifies track boundaries and creates bounding boxes or regions of interest for later measurement.
+
+### Module 2 Input
+
+- Enhanced image from Module 1
+
+### Module 2 Output
+
+- Binary segmented image
+- Track masks
+- Individual particle regions
+- Bounding boxes
+- Contours
+- Regions of interest
+
+## Module 3: Geometric Analysis and Particle Classification
+
+### Purpose
+
+This module measures the geometric properties of detected particle tracks and classifies them as Alpha or Electron particles.
+
+### Why This Module Is Needed
+
+Detection only tells the system where the tracks are. Classification requires measurable features that describe track shape, thickness, and movement pattern. Geometric analysis converts visual particle tracks into numerical descriptors.
+
+### Main Tasks
+
+This module performs:
+
+- Feature extraction
+- Skeletonisation
+- Track length measurement
+- Track width estimation
+- Curvature measurement
+- Tortuosity calculation
+- Feature vector creation
+- Particle classification
+
+### Algorithms Used
+
+Geometric feature extraction:
+
+- Skeletonisation
+- Distance Transform
+
+Measured features:
+
+- Track length
+- Track width
+- Curvature
+- Tortuosity
+
+Skeletonisation reason:
+
+Skeletonisation converts a segmented track into a one-pixel-wide centreline. This makes it easier to measure actual path length, curvature, and trajectory structure.
+
+Distance Transform reason:
+
+Distance Transform estimates the distance from foreground pixels to background pixels. When combined with the skeleton, it helps estimate track width.
+
+Classification algorithms considered:
+
+- Decision Tree
+- Support Vector Machine
+- Random Forest
+- k-Nearest Neighbours
+
+Selected default:
+
+- Random Forest
+
+Reason:
+
+Random Forest is selected because it is robust, reduces overfitting compared with a single Decision Tree, and handles feature variation well. It is suitable for classifying Alpha and Electron tracks using geometric features.
+
+Possible alternative:
+
+Decision Tree may be used if interpretability is more important than classification performance, especially if the dataset is small.
+
+### Module 3 Input
+
+- Segmented particle regions from Module 2
+- Track masks
+- Contours or skeletons
+
+### Module 3 Output
+
+- Track length
+- Track width
+- Curvature
+- Tortuosity
+- Feature table
+- Predicted particle class
+- Classification confidence or probability if supported
+
+## Module 4: Particle Analytics and Result Management
+
+### Purpose
+
+This module presents the final output of the system in a readable and useful format.
+
+### Why This Module Is Needed
+
+The system should not only classify particles. It should also help users understand the results through visualisation, summaries, statistics, and saved outputs.
+
+### Main Tasks
+
+This module performs:
+
+- Annotated image display
+- Particle count summary
+- Feature table display
+- Classification result display
+- Histogram or chart generation
+- Processed image saving
+- Result export
+- Optional PDF report generation
+
+### Possible Outputs
+
+- Annotated cloud chamber image
+- Particle count
+- Number of Alpha tracks
+- Number of Electron tracks
+- Table of measured features
+- Charts showing length, width, curvature, and tortuosity distribution
+- Exported report
+- Saved session result
+
+## Current Coding Direction
+
+The project root folder is:
+
+C:\Users\Marcus\CloudChamber
+
+The current development focus is Module 1: Image Pre-processing and Calibration.
+
+The implementation approach is:
+
+- Use Python files for reusable system code
+- Use Jupyter Notebook for testing, visualisation, and demonstration
+
+The `.py` files are needed because later modules must reuse the same code. The `.ipynb` notebook is useful because Module 1 is highly visual and requires comparison of original, grayscale, filtered, illumination-corrected, and enhanced images.
+
+## Current Folder Structure
+
+CloudChamber  
+├── data  
+│   ├── raw  
+│   │   └── cloud_chamber  
+│   ├── calibration  
+│   └── processed  
+│       ├── preprocessed  
+│       └── calibrated  
+├── notebooks  
+│   └── 01_preprocessing_calibration.ipynb  
+├── outputs  
+│   ├── images  
+│   └── logs  
+├── src  
+│   ├── preprocessing  
+│   │   ├── image_loader.py  
+│   │   ├── noise_reduction.py  
+│   │   ├── contrast_enhancement.py  
+│   │   ├── illumination_correction.py  
+│   │   └── preprocessing_pipeline.py  
+│   ├── calibration  
+│   │   ├── calibration_tool.py  
+│   │   └── calibration_metadata.py  
+│   └── utils  
+│       ├── path_utils.py  
+│       └── visualisation.py  
+├── config  
+│   └── preprocessing_config.yaml  
+├── cli
+│   └── preprocessing
+│       └── main_preprocessing.py
+├── requirements.txt  
+└── README.md
+
+## Dataset Placement
+
+Raw cloud chamber images should be placed in:
+
+C:\Users\Marcus\CloudChamber\data\raw\cloud_chamber
+
+Calibration or reference images should be placed in:
+
+C:\Users\Marcus\CloudChamber\data\calibration
+
+Pre-processed images should be saved in:
+
+C:\Users\Marcus\CloudChamber\data\processed\preprocessed
+
+Calibration metadata should be saved in:
+
+C:\Users\Marcus\CloudChamber\data\processed\calibrated
+
+Output images for visualisation should be saved in:
+
+C:\Users\Marcus\CloudChamber\outputs\images
+
+Logs should be saved in:
+
+C:\Users\Marcus\CloudChamber\outputs\logs
+
+## Current Implementation Status
+
+Prompts have already been generated and run for Module 1.
+
+The generated components should include:
+
+- Project structure
+- Path utilities
+- Image loader
+- Noise reduction functions
+- Contrast enhancement functions
+- Illumination correction function
+- Visualisation utilities
+- Pre-processing pipeline
+- Manual calibration tool
+- Calibration metadata handler
+- Main preprocessing script
+- Jupyter Notebook for Module 1 testing
+
+The next stage is to run, test, debug, and verify Module 1.
+
+## How Module 1 Should Be Run
+
+Open terminal in:
+
+C:\Users\Marcus\CloudChamber
+
+Create and activate virtual environment:
+
+py -m venv .venv  
+.venv\Scripts\activate
+
+Install dependencies:
+
+pip install -r requirements.txt
+
+Run the main script:
+
+python -m backend.cli.preprocessing.main_preprocessing
+
+Run Jupyter Notebook:
+
+jupyter notebook
+
+Open:
+
+notebooks/01_preprocessing_calibration.ipynb
+
+## Chapter 2 Mapping
+
+Chapter 2 must follow the fixed assignment template.
+
+2.1 Main Concept / Algorithm 1  
+Image Pre-processing and Calibration
+
+2.2 Main Concept / Algorithm 2  
+Particle Track Detection and Segmentation
+
+2.3 Main Concept / Algorithm 3  
+Geometric Analysis and Particle Classification
+
+2.4 Analysis of Existing Algorithms  
+Comparison tables and justification
+
+No additional top-level section such as 2.5 should be added unless the assignment template changes.
+
+## Recommended Team Split
+
+Member A:
+
+- Chapter 2.1
+- Module 1 Image Pre-processing and Calibration
+- Coding for pre-processing and calibration
+
+Member B:
+
+- Chapter 2.2
+- Module 2 Particle Track Detection and Segmentation
+- Coding for thresholding, morphology, connected components, and contours
+
+Member C:
+
+- Chapter 2.3
+- Module 3 Geometric Analysis and Particle Classification
+- Coding for skeletonisation, feature extraction, and classification
+
+Member D:
+
+- Chapter 2.4
+- Module 4 Particle Analytics and Result Management
+- Comparison tables, integration, visualisation, report output, editing, and consistency checking
+
+## Important Design Principle
+
+The system should be treated as an integrated pipeline, not a set of disconnected algorithms. Each module prepares the output needed by the next module.
+
+Module 1 improves image quality and calibration.  
+Module 2 uses the enhanced image to isolate particle tracks.  
+Module 3 measures and classifies the isolated tracks.  
+Module 4 presents and stores the final results.
+
+This logic should be preserved in both the dissertation writing and the implementation.

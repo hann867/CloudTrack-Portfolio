@@ -1,0 +1,90 @@
+{
+  "model_type": "RandomForestClassifier",
+  "model_version": "module3_rf_development_v2",
+  "model_stage": "development",
+  "feature_names": [
+    "track_length_px",
+    "mean_width_px",
+    "median_width_px",
+    "max_width_px",
+    "mean_curvature",
+    "max_curvature",
+    "tortuosity"
+  ],
+  "class_names": [
+    "Alpha",
+    "Electron"
+  ],
+  "random_state": 42,
+  "n_estimators": 100,
+  "class_weight": "balanced",
+  "training_timestamp": "2026-08-31T16:33:30.012950+00:00",
+  "training_dataset_identifier": "backend/data/processed/geometric_classification/expanded_human_approved_module3_features/final_independent/final_independent_module3_features.csv",
+  "training_dataset_sha256": "0f35ccb4d0b3e496e28d462a252ebcb1bc76070c0bfaeee46c2d04f5df0a2fac",
+  "training_sample_count": 34,
+  "training_class_counts": {
+    "Alpha": 15,
+    "Electron": 19
+  },
+  "training_source_counts": {
+    "AWAN": 6,
+    "Lecturer": 28
+  },
+  "training_source_class_counts": {
+    "AWAN|Alpha": 6,
+    "AWAN|Electron": 0,
+    "Lecturer|Alpha": 9,
+    "Lecturer|Electron": 19
+  },
+  "dependency_group_count": 29,
+  "training_gt_ids": [
+    "A002",
+    "A003",
+    "A004",
+    "A007",
+    "A009",
+    "A015",
+    "A016",
+    "A022",
+    "A024",
+    "A029",
+    "A037",
+    "A039",
+    "A042",
+    "A046",
+    "A049",
+    "E002",
+    "E003",
+    "E004",
+    "E006",
+    "E010",
+    "E013",
+    "E014",
+    "E016",
+    "E017",
+    "E018",
+    "E019",
+    "E020",
+    "E021",
+    "E023",
+    "E039",
+    "E044",
+    "E049",
+    "E055",
+    "E056"
+  ],
+  "rf_parameters": {
+    "n_estimators": 100,
+    "random_state": 42,
+    "class_weight": "balanced"
+  },
+  "preprocessing": "none",
+  "performance_evidence_identifier": "backend/data/processed/geometric_classification/expanded_independent_rf_reevaluation/rf_reevaluation_summary.txt",
+  "performance_evidence_sha256": "5d9d0dbe5772e9eddc951d1e41969a1e29f7178bd9c6350f24bd8a16e0c55916",
+  "known_limitations": [
+    "AWAN Electron = 0.",
+    "The grouped OOF evaluation is exploratory evidence and does not establish source-generalizable performance.",
+    "The deployed full-fit artifact has no held-out predictions of its own; the preserved 34-row grouped OOF evaluation remains the performance evidence."
+  ],
+  "training_code_version": "74086a0a1a464c10ede32c27981fe513479bd6c3"
+}
